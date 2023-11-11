@@ -1,11 +1,5 @@
 /* eslint no-unused-expressions: ["error", { "allowShortCircuit": true, "allowTernary": true }],
    no-console: ["error", { allow: ["warn", "error"] }] */
-const fs = require('fs');
-const path = require('path');
-
-const nodeRoot = path.dirname(require.main.filename);
-const configPath = path.join(nodeRoot, 'config.json');
-
 // sane defaults if config.json or parts are missing
 let config = {
   listen: {
@@ -13,11 +7,11 @@ let config = {
     port: 2222,
   },
   http: {
-    origins: ['localhost:2222'],
+    origins: ["*:*"],
   },
   user: {
-    name: null,
-    password: null,
+    name: "keepix",
+    password: "keepix",
     privatekey: null,
     overridebasic: false,
   },
@@ -77,26 +71,5 @@ let config = {
   verify: false,
   safeShutdownDuration: 300,
 };
-
-// test if config.json exists, if not provide error message but try to run anyway
-try {
-  if (fs.existsSync(configPath)) {
-    // eslint-disable-next-line no-console
-    console.info(`WebSSH2 service reading config from: ${configPath}`);
-    // eslint-disable-next-line global-require
-    config = require('read-config-ng')(configPath);
-  } else {
-    console.error(
-      `\n\nERROR: Missing config.json for WebSSH2. Current config: ${JSON.stringify(config)}`
-    );
-    console.error('\n  See config.json.sample for details\n\n');
-  }
-} catch (err) {
-  console.error(
-    `\n\nERROR: Missing config.json for WebSSH2. Current config: ${JSON.stringify(config)}`
-  );
-  console.error('\n  See config.json.sample for details\n\n');
-  console.error(`ERROR:\n\n  ${err}`);
-}
 
 module.exports = config;
